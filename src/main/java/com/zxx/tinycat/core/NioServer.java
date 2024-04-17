@@ -1,4 +1,4 @@
-package com.zxx.tinycat;
+package com.zxx.tinycat.core;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class NioServer {
 
-    static void startServer(int port) throws IOException {
+    public static void startServer(int port) throws IOException {
         //创建NIO ServerSocketChannel
         ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
         serverSocketChannel.socket().bind(new InetSocketAddress(port));
@@ -56,8 +56,11 @@ public class NioServer {
                         String message = new String(bytes);
                         System.out.println("接收到消息：" + message);
 
-                        String responseData = "Hello World\n";
-                        ByteBuffer writeBuffer = ByteBuffer.allocate(1024);
+                        String responseStr = "HelloWorld";
+                        String responseData = "HTTP/1.1 200 OK\n" +
+                                "Content-Length: " + responseStr.length() + "\n" +
+                                "Content-Type: text/plain; charset=utf-8\n\n" + responseStr;
+                        ByteBuffer writeBuffer = ByteBuffer.allocate(2048);
                         writeBuffer.put(responseData.getBytes());
                         writeBuffer.flip();
                         server.write(writeBuffer);
