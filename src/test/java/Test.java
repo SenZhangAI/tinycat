@@ -1,4 +1,5 @@
-import com.zxx.tinycat.core.http.request.HttpRequest;
+import com.zxx.tinycat.core.http.Http;
+
 
 public class Test {
     public static void main(String[] args) throws Exception {
@@ -9,8 +10,8 @@ public class Test {
                 "Host: 127.0.0.1:8081\n" +
                 "Accept-Encoding: gzip, deflate, br\n" +
                 "Connection: keep-alive";
-        HttpRequest httpRequest = new HttpRequest(payload);
-        System.out.println(httpRequest);
+        Http http = new Http(payload);
+        System.out.println(http);
 
         String payload2 = "POST /test/getUserId HTTP/1.1\n" +
                 "Content-Type: application/json\n" +
@@ -25,8 +26,8 @@ public class Test {
                 "{\n" +
                 "    \"ads\": 123\n" +
                 "}";
-        HttpRequest httpRequest2 = new HttpRequest(payload2);
-        System.out.println(httpRequest2);
+        Http http2 = new Http(payload2);
+        System.out.println(http2);
 
     }
 }

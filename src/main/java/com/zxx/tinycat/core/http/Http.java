@@ -1,10 +1,12 @@
-package com.zxx.tinycat.core.http.request;
+package com.zxx.tinycat.core.http;
 
+import com.sun.tools.javac.util.Assert;
 import com.zxx.tinycat.core.RequestMethodEnum;
-import com.zxx.tinycat.core.http.request.parser.HttpRequestBodyParser;
-import com.zxx.tinycat.core.http.request.parser.HttpRequestHeaderParser;
-import com.zxx.tinycat.core.http.request.parser.HttpRequestLineParser;
+import com.zxx.tinycat.core.http.parser.HttpRequestBodyParser;
+import com.zxx.tinycat.core.http.parser.HttpRequestHeaderParser;
+import com.zxx.tinycat.core.http.parser.HttpRequestLineParser;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +14,7 @@ import java.util.Map;
 /**
  * 请求报文的结构图 https://segmentfault.com/img/bVbvbwo/view?w=770&h=324
  */
-public class HttpRequest {
+public class Http {
     private String host;
     private String url;
     private Map<String, String> headers = new HashMap<>();
@@ -20,7 +22,7 @@ public class HttpRequest {
     private RequestMethodEnum requestMethod;
     private String httpVersion;
 
-    public HttpRequest(String payload) throws Exception {
+    public Http(String payload) throws Exception {
         HttpRequestReader reader = new HttpRequestReader(payload);
 
         List<String> requestLine = HttpRequestLineParser.parse(reader);

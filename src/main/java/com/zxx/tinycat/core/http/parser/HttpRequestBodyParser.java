@@ -1,7 +1,9 @@
-package com.zxx.tinycat.core.http.request.parser;
+package com.zxx.tinycat.core.http.parser;
 
 import com.sun.tools.javac.util.Assert;
-import com.zxx.tinycat.core.http.request.HttpRequestReader;
+import com.zxx.tinycat.core.http.HttpRequestReader;
+
+import java.util.Map;
 
 public class HttpRequestBodyParser {
     public static byte[] parse(HttpRequestReader reader) {
