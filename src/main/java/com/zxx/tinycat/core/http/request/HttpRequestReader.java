@@ -1,6 +1,6 @@
-package com.zxx.tinycat.core.http;
+package com.zxx.tinycat.core.http.request;
 
-import com.sun.tools.javac.util.Assert;
+//import com.sun.tools.javac.util.Assert;
 
 public class HttpRequestReader {
     final String payload;
@@ -55,7 +55,7 @@ public class HttpRequestReader {
 
 
     public void mustConsumeSpace() {
-       Assert.check(peek() == ' ', "消费空格异常");
+//       Assert.check(peek() == ' ', "消费空格异常");
        nextColumn();
     }
 
@@ -73,7 +73,7 @@ public class HttpRequestReader {
         } else {
             nextColumn();
         }
-        Assert.check(buffer.toString().length() > 0, "解析String异常，长度为空");
+//        Assert.check(buffer.toString().length() > 0, "解析String异常，长度为空");
         return buffer.toString();
     }
 

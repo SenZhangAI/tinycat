@@ -46,17 +46,23 @@ public class NioServer {
                 } else if (key.isReadable()) {
                     //如果是OP_READ事件，则进行读取和打印
                     SocketChannel server = (SocketChannel) key.channel();
-                    ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+                    ByteBuffer byteBuffer = ByteBuffer.allocate(128);
                     int len = server.read(byteBuffer);
                     //如果有数据，把数据打印出来
                     if (len > 0) {
+                        // 从写模式转换到读模式。其主要作用是准备缓冲区，以便数据可以被读取。
+                        // 当在缓冲区写入数据后，position 指向下一个可写入的位置，而 limit 通常设置为缓冲区的容量。在调用 flip() 方法后，它会做两件事：
+                        //1. 将limit 设置为当前的 position 值。这意味着标记了之前数据写入的位置，之后的位置不能再读取，因为那些位置没有有效数据。
+                        //2. 将position设置为 0，这样从缓冲区的开始位置开始读取数据。
                         byteBuffer.flip();
+                        // remaining方法--> 读模式下：在调用了 flip() 方法后，position 会设置为 0，而 limit 会设置为之前写入数据的位置。这时，remaining() 返回的是从 position 到 limit 的元素数量，即还可以从缓冲区中读取多少数据。
+                        //             --> 写模式下: 在数据被写入缓冲区时，position 表示当前写入的位置，而 limit 通常设置为缓冲区的容量。这时，remaining() 返回的是从 position 到 limit 的元素数量，即缓冲区还能接受多少数据。
                         byte[] bytes = new byte[byteBuffer.remaining()];
                         byteBuffer.get(bytes);
                         String message = new String(bytes);
                         System.out.println("接收到消息：" + message);
 
-                        String responseStr = "HelloWorld";
+                        String responseStr = "HelloWorld\n";
                         String responseData = "HTTP/1.1 200 OK\n" +
                                 "Content-Length: " + responseStr.length() + "\n" +
                                 "Content-Type: text/plain; charset=utf-8\n\n" + responseStr;
