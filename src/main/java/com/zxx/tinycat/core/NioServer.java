@@ -1,5 +1,8 @@
 package com.zxx.tinycat.core;
 
+import com.zxx.tinycat.core.http.request.HttpRequest;
+import com.zxx.tinycat.core.http.request.HttpRequestPool;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -8,11 +11,13 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class NioServer {
+    private final static int byteBufferCapacity = 32;
 
-    public static void startServer(int port) throws IOException {
+    public static void startServer(int port) throws Exception {
         //创建NIO ServerSocketChannel
         ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
         serverSocketChannel.socket().bind(new InetSocketAddress(port));
@@ -46,25 +51,21 @@ public class NioServer {
                 } else if (key.isReadable()) {
                     //如果是OP_READ事件，则进行读取和打印
                     SocketChannel server = (SocketChannel) key.channel();
-                    ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+                    ByteBuffer byteBuffer = ByteBuffer.allocate(byteBufferCapacity);
                     int len = server.read(byteBuffer);
-                    //如果有数据，把数据打印出来
-                    if (len > 0) {
-                        byteBuffer.flip();
-                        byte[] bytes = new byte[byteBuffer.remaining()];
-                        byteBuffer.get(bytes);
-                        String message = new String(bytes);
-                        System.out.println("接收到消息：" + message);
 
-                        String responseStr = "HelloWorld";
-                        String responseData = "HTTP/1.1 200 OK\n" +
-                                "Content-Length: " + responseStr.length() + "\n" +
-                                "Content-Type: text/plain; charset=utf-8\n\n" + responseStr;
-                        ByteBuffer writeBuffer = ByteBuffer.allocate(2048);
-                        writeBuffer.put(responseData.getBytes());
-                        writeBuffer.flip();
-                        server.write(writeBuffer);
-                    } else if (len == -1) {
+                    //表明byteBuffer不够大,需要循环读取
+                    HttpRequestPool httpRequestPool = new HttpRequestPool();
+                    while (len == byteBufferCapacity) {
+                        handleRequestSingleBuffer(byteBuffer, httpRequestPool);
+
+                        byteBuffer.clear();
+                        len = server.read(byteBuffer);
+                    }
+                    handleRequestSingleBuffer(byteBuffer, httpRequestPool);
+
+                    response(server, httpRequestPool);
+                    if (len < 0) {
                         //如果客户端断开连接，关闭socket
                         System.out.println("客户端断开连接");
                         server.close();
@@ -73,6 +74,35 @@ public class NioServer {
                 //从事件集合里删除本次处理的key,防止下次select重复使用
                 iterator.remove();
             }
+        }
+    }
+
+    public static void handleRequestSingleBuffer(ByteBuffer byteBuffer, HttpRequestPool requestPool) {
+        byteBuffer.flip();
+        byte[] bytes = new byte[byteBuffer.remaining()];
+        byteBuffer.get(bytes);
+        System.out.println("接收到的请求为:" + new String(bytes));
+        requestPool.addPayload(new String(bytes));
+    }
+
+
+    public static void response(SocketChannel server, HttpRequestPool httpRequestPool) throws IOException {
+        if (httpRequestPool.getHttpRequests() == null || httpRequestPool.getHttpRequests().isEmpty()) {
+            return;
+        }
+        for (HttpRequest httpRequest : httpRequestPool.getHttpRequests()) {
+            System.out.println("--------http请求报文-----------");
+            System.out.println(httpRequest.toString());
+
+            String responseStr = "HelloWorld\n";
+            String responseData = "HTTP/1.1 200 OK\n" +
+                    "Content-Length: " + responseStr.length() + "\n" +
+                    "Content-Type: text/plain; charset=utf-8\n\n" + responseStr;
+            ByteBuffer writeBuffer = ByteBuffer.allocate(204800);
+            writeBuffer.put(responseData.getBytes());
+            writeBuffer.flip();
+            server.write(writeBuffer);
+            System.out.println("响应结束");
         }
     }
 }

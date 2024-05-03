@@ -5,7 +5,7 @@ import com.zxx.tinycat.core.NioServer;
 import java.io.IOException;
 
 public class ServerStarter {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         NioServer.startServer(Integer.parseInt(System.getProperty("tinyServerPort", "8080")));
     }
 }
