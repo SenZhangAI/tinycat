@@ -9,8 +9,6 @@ public class Test {
                 "Accept-Encoding: gzip, deflate, br\n" +
                 "Connection: keep-alive\n" +
                 "\n";
-        HttpRequest httpRequest = new HttpRequest(payload);
-        System.out.println(httpRequest);
 
         String payload2 = "POST /get/userId HTTP/1.1\n" +
                 "User-Agent: Apifox/1.0.0 (https://apifox.com)\n" +
@@ -24,8 +22,6 @@ public class Test {
                 "{\n" +
                 "    \"123\": true\n" +
                 "}";
-        HttpRequest httpRequest2 = new HttpRequest(payload2);
-        System.out.println(httpRequest2);
 
 
         String payload3 = "POST /get/userId HTTP/1.1\n" +
