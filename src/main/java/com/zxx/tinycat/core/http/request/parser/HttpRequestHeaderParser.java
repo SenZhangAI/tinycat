@@ -7,7 +7,7 @@ public class HttpRequestHeaderParser {
     public static Map<String, String> parse(HttpRequestReader reader) {
 
         HashMap<String, String> headers = new HashMap<>();
-        while (!(reader.isEmpty() || reader.peek() == '\n' || (reader.peek() == '\r' && reader.peekNextChar() == '\n'))) {
+        while (!(reader.peek() == '\n' || (reader.peek() == '\r' && reader.peekNextChar() == '\n'))) {
             String headerKey = reader.consumeToEndChar(':');
             reader.mustConsumeSpace();
 
@@ -15,9 +15,7 @@ public class HttpRequestHeaderParser {
 
             headers.put(headerKey, headerValue);
         }
-        if (reader.isNotEmpty()) {
-            reader.consumeNewLine();
-        }
+        reader.consumeNewLine();
 
         return headers;
     }

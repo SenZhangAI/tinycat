@@ -1,4 +1,4 @@
-import com.zxx.tinycat.core.http.request.HttpRequestPool;
+import com.zxx.tinycat.core.http.request.HttpRequestHandler;
 
 public class Test3 {
     public static void main(String[] args) {
@@ -14,10 +14,10 @@ public class Test3 {
                 "{\n" +
                 "    \"123\": true\n" +
                 "}";
-        HttpRequestPool httpRequestPool = new HttpRequestPool();
-        httpRequestPool.addPayload(payload);
-        System.out.println(httpRequestPool.getHttpRequests().size());
-        System.out.println(httpRequestPool.getHttpRequests().toString());
+        HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
+        httpRequestHandler.addPayload(payload);
+        System.out.println(httpRequestHandler.getHttpRequests().size());
+        System.out.println(httpRequestHandler.getHttpRequests().toString());
 
     }
 }

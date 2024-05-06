@@ -17,7 +17,7 @@ import java.util.List;
  * unParsedPayload 存放前面未解析完的数据
  *
  */
-public class HttpRequestPool {
+public class HttpRequestHandler {
     private List<String> payloads = new ArrayList<>();
 
     private List<HttpRequest> httpRequests = new ArrayList<>();
@@ -26,6 +26,10 @@ public class HttpRequestPool {
 
     public List<HttpRequest> getHttpRequests() {
         return this.httpRequests;
+    }
+
+    public HttpRequestReader getUnFinishRequestReader() {
+        return unFinishRequestReader;
     }
 
     public void addPayload(String payload) {
@@ -77,8 +81,10 @@ public class HttpRequestPool {
         }
         httpRequests.add(httpRequest);
 
-        //解析出一个HttpRequest 继续解析剩余字符串
-        if (unFinishRequestReader.isNotEmpty()) {
+        if (unFinishRequestReader.isEmpty()) {
+            unFinishRequestReader = null;
+        } else {
+            //解析出一个HttpRequest 继续解析剩余字符串
             unFinishRequestReader = new HttpRequestReader(unFinishRequestReader.remainStr());
             parseUnFinishRequestReader();
         }
