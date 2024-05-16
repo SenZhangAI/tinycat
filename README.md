@@ -9,6 +9,7 @@ TinyCat 是类似TomCat的HTTP WebService, 基于NIO, 采用纯Java原生开发
 - [X] basic response and log
 - [X] command line support
 - [X] http parser
-- [ ] static file support
-- [ ] thread pool support
-- [ ] dynamic handler support
+- [X] static file support
+- [X] thread pool support
+- [X] dynamic handler support
+- [X] RESTful style API support
