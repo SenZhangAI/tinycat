@@ -8,6 +8,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
+import static com.zxx.tinycat.core.NioServer.*;
+
 public class Test {
     public static void main(String[] args) throws Exception {
         String payload = "GET /user/list HTTP/1.1\n" +
@@ -164,7 +166,8 @@ public class Test {
                 System.out.print((char) buffer.get());
             }
 
-            NioServer.handleRequestSingleBuffer(buffer, httpRequestHandler);
+            NioServer nioServer = new NioServer();
+            nioServer.handleRequestSingleBuffer(buffer, httpRequestHandler);
             // 清空缓冲区并准备下一次写入
             buffer.clear();
             position += part.length(); // 更新位置
@@ -177,7 +180,6 @@ public class Test {
         if (httpRequestHandler.getUnFinishRequestReader() != null) {
             System.out.println("exist unFinishPayload:" + httpRequestHandler.getUnFinishRequestReader().payload());
         }
-        System.out.println("hhhhh");
     }
 
 }

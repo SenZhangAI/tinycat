@@ -1,16 +1,7 @@
 package com.zxx.tinycat.core.http.request;
 
-import com.zxx.tinycat.core.RequestMethodEnum;
-import com.zxx.tinycat.core.http.exception.ErrorEnum;
-import com.zxx.tinycat.core.http.exception.HttpParseException;
-import com.zxx.tinycat.core.http.request.parser.HttpRequestBodyParser;
-import com.zxx.tinycat.core.http.request.parser.HttpRequestHeaderParser;
-import com.zxx.tinycat.core.http.request.parser.HttpRequestLineParser;
-import com.zxx.tinycat.core.http.request.parser.HttpRequestReader;
-
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

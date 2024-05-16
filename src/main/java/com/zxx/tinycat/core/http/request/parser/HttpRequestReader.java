@@ -3,7 +3,7 @@ package com.zxx.tinycat.core.http.request.parser;
 //import com.sun.tools.javac.util.Assert;
 
 import java.lang.String;
-import com.zxx.tinycat.core.RequestMethodEnum;
+import com.zxx.tinycat.core.http.request.RequestMethodEnum;
 import com.zxx.tinycat.core.http.exception.ErrorEnum;
 import com.zxx.tinycat.core.http.exception.HttpParseException;
 
@@ -13,7 +13,6 @@ public class HttpRequestReader {
     int line;
     int column;
     private final MyStringBuffer buffer = new MyStringBuffer();
-    private Boolean fail;
 
 
     public HttpRequestReader(String payload) {
@@ -23,9 +22,6 @@ public class HttpRequestReader {
         this.column = 1;
     }
 
-    public Boolean getFail() {
-        return fail;
-    }
 
     public void freshPos() {
         this.line = 1;
@@ -33,9 +29,6 @@ public class HttpRequestReader {
         this.column = 1;
     }
 
-    public void setFail(Boolean fail) {
-        this.fail = fail;
-    }
 
     public int pos() {
         return this.pos;

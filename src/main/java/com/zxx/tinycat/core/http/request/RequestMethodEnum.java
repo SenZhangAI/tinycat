@@ -1,4 +1,4 @@
-package com.zxx.tinycat.core;
+package com.zxx.tinycat.core.http.request;
 
 
 public enum RequestMethodEnum {
