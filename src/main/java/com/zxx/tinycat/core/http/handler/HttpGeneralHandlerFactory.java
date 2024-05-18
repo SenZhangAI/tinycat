@@ -31,7 +31,9 @@ public class HttpGeneralHandlerFactory {
         staticFileHandler.add(p);
     }
 
-    HttpGeneralHandlerInterface searchHandler(String method, String url) {
+    HttpGeneralHandlerInterface searchHandler(String method, String url, HttpRequest request) {
+        //把url后面的参数部分去除
+        url = url.split("\\?")[0];
         //尝试获取静态资源
         if ("GET".equals(method)) {
             final HttpGeneralHandlerInterface fileHandler = searchStaticFileHandler(url);
@@ -46,10 +48,12 @@ public class HttpGeneralHandlerFactory {
         }
 
 
-        Map<String, String> restParamMap = new HashMap<>();
+        Map<String, Object> restParamMap = new HashMap<>();
         final HttpGeneralHandlerInterface search = restRoot.search(method, url, restParamMap);
         if (search != null) {
-            //step1. restParamMap 放到 request 中;
+            request.setParamsFromUrl();
+            request.addParams(restParamMap);
+
             return search;
         }
         return null;
@@ -65,7 +69,7 @@ public class HttpGeneralHandlerFactory {
     }
 
     public HttpResponse handle(String method, String url, HttpRequest request) throws Exception {
-        final HttpGeneralHandlerInterface handler = searchHandler(method, url);
+        final HttpGeneralHandlerInterface handler = searchHandler(method, url, request);
         if (handler != null) {
             final HttpResponse response = handler.handle(request);
             return response;

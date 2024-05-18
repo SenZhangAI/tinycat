@@ -22,7 +22,7 @@ public class RestFulPathTreeNode {
     String node;
     List<RestFulPathTreeNode> subnodes = new ArrayList<>();
     HttpGeneralHandlerInterface handler;
-    public HttpGeneralHandlerInterface search(List<String> path, int index, Map<String, String> restParameter) {
+    public HttpGeneralHandlerInterface search(List<String> path, int index, Map<String, Object> restParameter) {
         if (!isRoot) {
             if (isParam) {
                 restParameter.put(paramName, path.get(index));

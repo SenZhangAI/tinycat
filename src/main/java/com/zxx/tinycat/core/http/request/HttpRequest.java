@@ -1,5 +1,6 @@
 package com.zxx.tinycat.core.http.request;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,9 +17,45 @@ public class HttpRequest {
     private String httpVersion;
     private int contentLength;
 
+    private Map<String, Object> params = null;
+
 
     public HttpRequest() {
 
+    }
+
+    public Map<String, Object> getParams() {
+        //这里采用Lazy方式， 只有在需要使用params的时候再尝试解析
+        if (params == null) {
+            setParamsFromUrl();
+        }
+        return params;
+    }
+
+    public void setParamsFromUrl() {
+        if (!url.contains("?")) {
+            return;
+        }
+
+        HashMap<String, Object> paramsMap = new HashMap<>();
+        //这里不用URL类获取值, 单纯地解析字符串当练手
+        String paramStr = url.split("\\?")[1];
+        new ArrayList<>(Arrays.asList(paramStr.split("&"))).forEach(s -> {
+            String[] split = s.split("=");
+            paramsMap.put(split[0], split[1]);
+        });
+
+        setParams(paramsMap);
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
+    }
+    public void addParams(Map<String, Object> params) {
+        if (this.params == null) {
+            this.params = new HashMap<>();
+        }
+        this.params.putAll(params);
     }
 
 

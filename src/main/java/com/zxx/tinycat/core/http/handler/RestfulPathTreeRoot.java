@@ -12,7 +12,7 @@ public class RestfulPathTreeRoot {
     // key: GET POST DELETE PUT ,  value: node
     List<Pair<String, RestFulPathTreeNode>> nodePairs = new ArrayList<>();
 
-    public HttpGeneralHandlerInterface search(String method, String url, Map<String, String> restParameter) {
+    public HttpGeneralHandlerInterface search(String method, String url, Map<String, Object> restParameter) {
         List<String> path = new ArrayList<>(Arrays.asList(url.split("/")));
         for (final Pair<String, RestFulPathTreeNode> nodePair : nodePairs) {
             if (nodePair.getKey().equals(method)) {

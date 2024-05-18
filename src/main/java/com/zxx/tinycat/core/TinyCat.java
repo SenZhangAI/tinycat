@@ -27,4 +27,7 @@ public class TinyCat {
     public void put(String url, HttpGeneralHandlerInterface handler) throws Exception {
         httpGeneralHandlerFactory.register(RequestMethodEnum.PUT.getCode(), url, handler);
     }
+    public void delete(String url, HttpGeneralHandlerInterface handler) throws Exception {
+        httpGeneralHandlerFactory.register(RequestMethodEnum.DELETE.getCode(), url, handler);
+    }
 }
